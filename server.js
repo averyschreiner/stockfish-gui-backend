@@ -48,6 +48,12 @@ app.post('/bestmove', (req, res) => {
     stockfish.stdin.write('uci\n')
 })
 
-app.listen(3001, () => {
-    console.log('Server running on port 3001')
+// for deployment
+app.listen(() => {
+    console.log('Server running')
 })
+
+// for running locally
+// app.listen(3001, () => {
+//     console.log("Server listening on port 3001")
+// })
