@@ -1,29 +1,24 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
-const corsOptions = {
-    origin: 'https://lemon-ocean-032840610.4.azurestaticapps.net/',
-    optionsSuccessStatus: 200
-}
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 const { spawn } = require('child_process')
-const port = 3000
 
 app.post('/bestmove', (req, res) => {
     const { fen, elo } = req.body
     const depth = 20
-    console.log('$$$$$$ fen is ' + fen + ' $$$$$$')
-    console.log('$$$$$$ elo is ' + elo + ' $$$$$$')
-    console.log('---------------------------------')
+    // console.log('$$$$$$ fen is ' + fen + ' $$$$$$')
+    // console.log('$$$$$$ elo is ' + elo + ' $$$$$$')
+    // console.log('---------------------------------')
     const stockfish = spawn('stockfish/stockfish-windows-x86-64-avx2.exe')
 
     stockfish.stdout.on('data', (data) => {
         const stockfish_data = data.toString().trim()
         let score = ''
         let bestmove = ''
-        console.log(stockfish_data)
-        console.log('---------------------------------')
+        // console.log(stockfish_data)
+        // console.log('---------------------------------')
 
         if (stockfish_data.includes('uciok')) {
             stockfish.stdin.write('setoption name UCI_LimitStrength value true\n')
@@ -52,6 +47,11 @@ app.post('/bestmove', (req, res) => {
     stockfish.stdin.write('uci\n')
 })
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
+// const port = 3001
+// app.listen(port, () => {
+//     console.log(`Server running on port ${port}`)
+// })
+
+app.listen(() => {
+    console.log('Server is running.')
 })
