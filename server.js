@@ -1,10 +1,14 @@
 const express = require('express')
 const cors = require('cors')
-const { spawn } = require('child_process')
-
 const app = express()
-app.use(cors())
+const corsOptions = {
+    origin: 'https://lemon-ocean-032840610.4.azurestaticapps.net/',
+    optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 app.use(express.json())
+const { spawn } = require('child_process')
+const port = 3000
 
 app.post('/bestmove', (req, res) => {
     const { fen, elo } = req.body
@@ -48,12 +52,6 @@ app.post('/bestmove', (req, res) => {
     stockfish.stdin.write('uci\n')
 })
 
-// for deployment
-app.listen(() => {
-    console.log('Server running')
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
 })
-
-// for running locally
-// app.listen(3001, () => {
-//     console.log("Server listening on port 3001")
-// })
