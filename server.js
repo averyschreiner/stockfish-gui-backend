@@ -1,17 +1,20 @@
 const express = require('express')
 const cors = require('cors')
 const { spawn } = require('child_process')
+const endpoints = require('express-list-endpoints')
 const app = express()
 app.use(cors())
 app.use(express.json())
 
 // for pre-flight ??
-app.options('*', cors())
+// app.options('*', cors())
 
-app.post('/bestmove', (req, res) => {
-    const { fen, elo } = req.body
+app.get('/bestmove', (req, res) => {
+    const { fen, elo } = req.query
     const depth = 20
     const stockfish = spawn('stockfish/stockfish-windows-x86-64-avx2.exe')
+
+    // console.log("received request at route bestmove\nfen: " + fen + "\nelo: " + elo)
 
     stockfish.stdout.on('data', (data) => {
         const stockfish_data = data.toString().trim()
@@ -38,6 +41,7 @@ app.post('/bestmove', (req, res) => {
         if (stockfish_data.includes('bestmove')) {
             bestmove = stockfish_data.substring(stockfish_data.indexOf('bestmove '))
             bestmove = bestmove.split(" ")[1]
+            // console.log('returning bestmove: ' + bestmove)
             res.json({score: score, bestmove: bestmove})
             stockfish.kill()
         }
@@ -45,11 +49,12 @@ app.post('/bestmove', (req, res) => {
     stockfish.stdin.write('uci\n')
 })
 
-// const port = 3001
-// app.listen(port, () => {
-//     console.log(`Server running on port ${port}`)
-// })
+let routes = endpoints(app)
+app.get('/', (req, res) => {
+  res.json(routes)
+})
 
-app.listen(() => {
-    console.log('Server is running.')
+const port = process.env.PORT ||3001
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
 })
