@@ -2,18 +2,16 @@ const express = require('express')
 const cors = require('cors')
 const { spawn } = require('child_process')
 const app = express()
-
-const corsOptions = {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-}
-
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(express.json())
 
 app.post('/bestmove', (req, res) => {
+    // set things on the response for cors
+    res.set('Access-Control-Allow-Origin', 'https://lemon-ocean-032840610.4.azurestaticapps.net/')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    res.header('Access-Control-Allow-Headers', 'Content-Type')
+    res.header('Access-Control-Allow-Credentials', true)
+    
     const { fen, elo } = req.body
     const depth = 20
     // console.log('$$$$$$ fen is ' + fen + ' $$$$$$')
