@@ -5,26 +5,18 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.post('/bestmove', (req, res) => {
-    // set things on the response for cors
-    res.set('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    res.header('Access-Control-Allow-Headers', 'Content-Type')
-    res.header('Access-Control-Allow-Credentials', true)
+// for pre-flight ??
+// app.options('*', cors())
 
+app.post('/bestmove', (req, res) => {
     const { fen, elo } = req.body
     const depth = 20
-    // console.log('$$$$$$ fen is ' + fen + ' $$$$$$')
-    // console.log('$$$$$$ elo is ' + elo + ' $$$$$$')
-    // console.log('---------------------------------')
     const stockfish = spawn('stockfish/stockfish-windows-x86-64-avx2.exe')
 
     stockfish.stdout.on('data', (data) => {
         const stockfish_data = data.toString().trim()
         let score = ''
         let bestmove = ''
-        // console.log(stockfish_data)
-        // console.log('---------------------------------')
 
         if (stockfish_data.includes('uciok')) {
             stockfish.stdin.write('setoption name UCI_LimitStrength value true\n')
@@ -35,7 +27,7 @@ app.post('/bestmove', (req, res) => {
             stockfish.stdin.write(`position fen ${fen}\n go depth ${depth}\n`)
         }
         if (stockfish_data.includes(`info depth ${depth}`)) {
-            cp = stockfish_data.indexOf('cp')
+            let cp = stockfish_data.indexOf('cp')
             if (cp == -1) {
                 score = stockfish_data.substring(stockfish_data.indexOf('score ') + 6, stockfish_data.indexOf('score ') + 13)
             }
