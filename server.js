@@ -4,7 +4,7 @@ const { spawn } = require('child_process')
 const app = express()
 
 const corsOptions = {
-    origin: 'https://lemon-ocean-032840610.4.azurestaticapps.net/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     optionsSuccessStatus: 204,
