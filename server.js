@@ -6,7 +6,7 @@ app.use(cors())
 app.use(express.json())
 
 // for pre-flight ??
-// app.options('*', cors())
+app.options('*', cors())
 
 app.post('/bestmove', (req, res) => {
     const { fen, elo } = req.body
