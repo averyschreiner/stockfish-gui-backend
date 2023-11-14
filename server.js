@@ -1,9 +1,17 @@
 const express = require('express')
 const cors = require('cors')
-const app = express()
-app.use(cors())
-app.use(express.json())
 const { spawn } = require('child_process')
+const app = express()
+
+const corsOptions = {
+    origin: 'https://lemon-ocean-032840610.4.azurestaticapps.net/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    optionsSuccessStatus: 204,
+}
+
+app.use(cors(corsOptions))
+app.use(express.json())
 
 app.post('/bestmove', (req, res) => {
     const { fen, elo } = req.body
