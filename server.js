@@ -7,11 +7,11 @@ app.use(express.json())
 
 app.post('/bestmove', (req, res) => {
     // set things on the response for cors
-    res.set('Access-Control-Allow-Origin', 'https://lemon-ocean-032840610.4.azurestaticapps.net/')
+    res.set('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     res.header('Access-Control-Allow-Headers', 'Content-Type')
     res.header('Access-Control-Allow-Credentials', true)
-    
+
     const { fen, elo } = req.body
     const depth = 20
     // console.log('$$$$$$ fen is ' + fen + ' $$$$$$')
