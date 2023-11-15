@@ -21,7 +21,7 @@ app.get('/bestmove', (req, res) => {
     const depth = 20
     const stockfish = spawn('stockfish/stockfish-windows-x86-64-avx2.exe')
 
-    // console.log("received request at route bestmove\nfen: " + fen + "\nelo: " + elo)
+    console.log("received request at route bestmove\nfen: " + fen + "\nelo: " + elo)
 
     stockfish.stdout.on('data', (data) => {
         const stockfish_data = data.toString().trim()
