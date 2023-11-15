@@ -1,20 +1,20 @@
 const express = require('express')
-// const cors = require('cors')
+const cors = require('cors')
 const { spawn } = require('child_process')
-// const endpoints = require('express-list-endpoints')
+const endpoints = require('express-list-endpoints')
 const app = express()
-// app.use(cors())
+app.use(cors())
 app.use(express.json())
-const path = require('path')
+// const path = require('path')
 
 // for pre-flight ??
 // app.options('*', cors())
 
-app.use(express.static(path.join(__dirname, 'build')))
+// app.use(express.static(path.join(__dirname, 'build')))
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'build', 'index.html'))
+// })
 
 app.get('/bestmove', (req, res) => {
     const { fen, elo } = req.query
@@ -56,10 +56,10 @@ app.get('/bestmove', (req, res) => {
     stockfish.stdin.write('uci\n')
 })
 
-// let routes = endpoints(app)
-// app.get('/', (req, res) => {
-//   res.json(routes)
-// })
+let routes = endpoints(app)
+app.get('/', (req, res) => {
+  res.json(routes)
+})
 
 const port = process.env.PORT || 3001
 app.listen(port, () => {
