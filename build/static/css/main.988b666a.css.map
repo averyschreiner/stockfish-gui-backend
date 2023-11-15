@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.988b666a.css","mappings":"AAAA,KACE,iBACF,CAEA,WAEE,WAAY,CADZ,SAEF","sources":["App.css"],"sourcesContent":[".App {\n  text-align: center;\n}\n\n#container {\n  width: 40%;\n  height: auto;\n}"],"names":[],"sourceRoot":""}
