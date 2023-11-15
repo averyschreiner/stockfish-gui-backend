@@ -5,23 +5,13 @@ const endpoints = require('express-list-endpoints')
 const app = express()
 app.use(cors())
 app.use(express.json())
-// const path = require('path')
-
-// for pre-flight ??
-// app.options('*', cors())
-
-// app.use(express.static(path.join(__dirname, 'build')))
-
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'build', 'index.html'))
-// })
 
 app.get('/bestmove', (req, res) => {
-    const { fen, elo } = req.query
-    const depth = 20
+    const { fen, elo, depth } = req.query
+    // console.log(`got request for bestmove with fen = ${fen}, elo = ${elo}, depth = ${depth}`)
     const stockfish = spawn('stockfish/stockfish-windows-x86-64-avx2.exe')
 
-    console.log("received request at route bestmove\nfen: " + fen + "\nelo: " + elo)
+    stockfish.stdin.write('uci\n')
 
     stockfish.stdout.on('data', (data) => {
         const stockfish_data = data.toString().trim()
@@ -48,12 +38,10 @@ app.get('/bestmove', (req, res) => {
         if (stockfish_data.includes('bestmove')) {
             bestmove = stockfish_data.substring(stockfish_data.indexOf('bestmove '))
             bestmove = bestmove.split(" ")[1]
-            // console.log('returning bestmove: ' + bestmove)
             res.json({score: score, bestmove: bestmove})
             stockfish.kill()
         }
     })
-    stockfish.stdin.write('uci\n')
 })
 
 let routes = endpoints(app)
@@ -63,5 +51,5 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT || 3001
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
+    // console.log(`Server running on port ${port}`)
 })
