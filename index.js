@@ -1,10 +1,12 @@
 const express = require('express')
+const path = require('path')
 const cors = require('cors')
 const { spawn } = require('child_process')
 const endpoints = require('express-list-endpoints')
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use(express.static(path.join(__dirname, './build')));
 
 app.get('/play/bestmove', (req, res) => {
     const { fen, elo, depth} = req.query
@@ -93,9 +95,13 @@ app.get('/analyze', (req, res) => {
     })
 })
 
-let routes = endpoints(app)
 app.get('/', (req, res) => {
-  res.json(routes)
+    res.sendFile(path.join(__dirname, './build/index.html'));
+})
+
+let routes = endpoints(app)
+app.get('/routes', (req, res) => {
+    res.json(routes)
 })
 
 const port = process.env.PORT || 3001
